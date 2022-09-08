@@ -1,9 +1,15 @@
 pipeline {
     agent {
         docker {
-            image 'node:16-alpine'
+            image 'node:16.13.1-alpine'
             args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
             }
+        }
+
+    environment {
+            APP_STAGING = credentials('APP_STAGING')
+            APP_PRODUCTION = credentials('APP_PRODUCTION')
+            SNYK_TOKEN = credentials('SNYK_TOKEN')
         }
 
     stages {
@@ -17,6 +23,29 @@ pipeline {
                         env.GIT_REPO_NAME = scmVars.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
                     }
                 }
+                }
+
+                stage('Copy Credentials') {
+                    steps {
+                        script {
+                            if (env.BRANCH_NAME == 'main') {
+                                sh 'cp $APP_PRODUCTION .env'
+                            } else {
+                                sh 'cp $APP_STAGING .env'
+                            }
+                        }
+                    }
+                }
+
+                stage('Snyk Security Scan') {
+                  steps {
+                    echo 'Testing...'
+                    snykSecurity(
+                      snykInstallation: 'SA App',
+                      snykTokenId: environment.SNYK_TOKEN,
+                      // place other parameters here
+                    )
+                  }
                 }
 
 //         stage('Install Dependencies') {
