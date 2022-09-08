@@ -36,12 +36,12 @@ filters: &filters
 # The CircleCi Jobs Tree
 version: 2.1
 orbs:
-  node: circleci/node@4.7.0
+  node: circleci/node@5.0.2
   snyk: snyk/snyk@1.1.1
 jobs:
   checkout_code:
     <<: *defaults
-    parallelism: 2
+    parallelism: 4
     steps:
       - checkout
       - node/install-packages:
