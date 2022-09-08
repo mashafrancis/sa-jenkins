@@ -4,7 +4,7 @@
         "CouldBeElvis": "off",
         "CouldBeSwitchStatement": "off",
         "formatting.Indentation": {
-            "spacesPerIndentLevel": 4,
+            "spacesPerIndentLevel": 2,
             "severity": "info"
         },
         "VariableName": {

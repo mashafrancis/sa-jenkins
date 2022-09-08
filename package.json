@@ -13,7 +13,7 @@
     "codeStyle:fix": "yarn prettier:fix && yarn eslint:fix",
     "husky": "pretty-quick --staged && yarn prettier",
     "prettier:fix": "prettier --write \"*/**/*.{js,ts,tsx,json}\"",
-    "jenkins:lint": "cat Jenkinsfile | npm-groovy-lint --format -"
+    "jenkins:lint": "npm-groovy-lint"
   },
   "dependencies": {
     "next": "latest",
