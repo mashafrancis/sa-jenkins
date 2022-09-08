@@ -7,6 +7,11 @@ pipeline {
         }
 
     stages {
+        stage('CleanWorkspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Clone Repository') {
               steps {
                     script {
@@ -24,6 +29,18 @@ pipeline {
                 script {
                     sh 'yarn --frozen-lockfile'
                     sh 'yarn build'
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                script {
+                    try {
+                        sh 'yarn test:unit'
+                    } catch  (Error|Exception e){
+                        echo "failed but we continue"
+                    }
                 }
             }
         }
