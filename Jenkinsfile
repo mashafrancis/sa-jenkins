@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:16.13.1-alpine'
+            image 'node:16-alpine'
             args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
             }
         }
@@ -19,29 +19,28 @@ pipeline {
                 }
                 }
 
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    sh 'yarn --frozen-lockfile'
-                }
-            }
-        }
-
-        stage('Run Unit Tests') {
-            steps {
-                script {
-                    sh 'yarn test:unit'
-                }
-            }
-        }
+//         stage('Install Dependencies') {
+//             steps {
+//                 script {
+//                     sh 'yarn --frozen-lockfile'
+//                 }
+//             }
+//         }
+//
+//         stage('Run Unit Tests') {
+//             steps {
+//                 script {
+//                     sh 'yarn test:unit'
+//                 }
+//             }
+//         }
 
         stage('Build Docker Image') {
             steps {
                 script {
                     sh 'apk add --update docker openrc'
-                    sh 'make build-production'
-                    // app = docker.build("${env.GIT_REPO_NAME}/development")
-                    // app = docker.build("service-availability/dynatrace-reporting-frontend")
+                    // sh 'make build-production'
+                    app = docker.build("${env.GIT_REPO_NAME}")
                 }
             }
         }
@@ -51,5 +50,13 @@ pipeline {
             always {
                 cleanWs()
             }
+            success {
+                        echo 'I succeeded!'
+                    }
+            failure {
+                    mail to: 'francismasha96@gmail.com',
+                         subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                         body: "Something is wrong with ${env.BUILD_URL}"
+                }
         }
 }
