@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: cimg/node:16.8.0
+    - image: cimg/node:18.8.0
   working_directory: ~/app
 
 # Aliases
