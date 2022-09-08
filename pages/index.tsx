@@ -12,9 +12,9 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className={styles.title}>
-          Good stuff, <a href="https://nextjs.org">so far.</a>
-        </h1>
+        <h2 className={styles.title}>
+          It worked on my machine...
+        </h2>
 
         <span>
             <Image src="/hooray.gif" alt="Hooray" width={500} height={400} />

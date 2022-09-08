@@ -6,16 +6,11 @@ exports[`renders homepage unchanged 1`] = `
     class="container"
   >
     <main>
-      <h1
+      <h2
         class="title"
       >
-        Good stuff, 
-        <a
-          href="https://nextjs.org"
-        >
-          so far.
-        </a>
-      </h1>
+        It worked on my machine...
+      </h2>
       <span>
         <span
           style="box-sizing: border-box; display: inline-block; overflow: hidden; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"
