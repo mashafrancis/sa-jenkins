@@ -79,6 +79,10 @@
   margin-left: 0.5rem;
 }
 
+.image {
+  border-radius: 12px;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

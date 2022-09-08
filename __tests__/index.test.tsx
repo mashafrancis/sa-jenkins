@@ -1,14 +1,14 @@
-import { render, screen } from '@testing-library/react'
-import Home from '@/pages/index'
+import { render, screen } from '@testing-library/react';
+import Home from '@/pages/index';
 
 describe('Home', () => {
-  it('renders a heading', () => {
-    render(<Home />)
+	it('renders a heading', () => {
+		render(<Home />);
 
-    const heading = screen.getByRole('heading', {
-      name: /It worked on my machine.../i,
-    })
+		const heading = screen.getByRole('heading', {
+			name: /It worked on my machine.../i,
+		});
 
-    expect(heading).toBeInTheDocument()
-  })
-})
+		expect(heading).toBeInTheDocument();
+	});
+});
