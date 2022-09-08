@@ -16,7 +16,16 @@ pipeline {
                         env.SHORT_COMMIT = "${scmVars.GIT_COMMIT[0..7]}"
                         env.GIT_REPO_NAME = scmVars.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
                     }
-          }
-          }
+                }
+
+                stage('Install Dependencies') {
+                            steps {
+                                script {
+                                    sh 'yarn --frozen-lockfile'
+                                    sh 'yarn build'
+                                }
+                            }
+                        }
+        }
     }
 }
