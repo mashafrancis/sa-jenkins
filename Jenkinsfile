@@ -7,11 +7,6 @@ pipeline {
         }
 
     stages {
-        stage('CleanWorkspace') {
-            steps {
-                cleanWs()
-            }
-        }
         stage('Clone Repository') {
               steps {
                     script {
@@ -41,6 +36,16 @@ pipeline {
                     } catch  (Error|Exception e){
                         echo "failed but we continue"
                     }
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'apk add --update docker openrc'
+                    app = docker.build("${env.GIT_REPO_NAME}")
+                    // app = docker.build("service-availability/dynatrace-reporting-frontend")
                 }
             }
         }
