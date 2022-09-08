@@ -82,15 +82,15 @@ jobs:
             /tmp/cc-test-reporter upload-coverage -i /tmp/codeclimate.total.json
             sed -n -e 24p /tmp/codeclimate.total.json
 
-#  build_artifacts:
-#    <<: *defaults
-#    steps:
-#      - *cmd_attach_workspace
-#      - run:
-#          name: Run build
-#          command: |
-#            yarn run build
-#      - *persist_to_workspace
+  build_artifacts:
+    <<: *defaults
+    steps:
+      - *cmd_attach_workspace
+      - run:
+          name: Run build
+          command: |
+            yarn run build
+      - *persist_to_workspace
 
 #  build_push_image:
 #    docker:
@@ -132,11 +132,11 @@ workflows:
       - upload_coverage:
           requires:
             - test_and_report
-#      - build_artifacts:
-#          requires:
-#            - checkout_code
-#            - test_and_report
-#          <<: *filters
+      - build_artifacts:
+          requires:
+            - checkout_code
+            - test_and_report
+          <<: *filters
 #      - build_push_image:
 #          requires:
 #            - build_artifacts
