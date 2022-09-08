@@ -23,7 +23,6 @@ pipeline {
             steps {
                 script {
                     sh 'yarn --frozen-lockfile'
-                    sh 'yarn build'
                 }
             }
         }
@@ -31,11 +30,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 script {
-                    try {
-                        sh 'yarn test:unit'
-                    } catch  (Error|Exception e){
-                        echo "failed but we continue"
-                    }
+                    sh 'yarn test:unit'
                 }
             }
         }
@@ -44,7 +39,8 @@ pipeline {
             steps {
                 script {
                     sh 'apk add --update docker openrc'
-                    app = docker.build("${env.GIT_REPO_NAME}")
+                    sh 'make build-production'
+                    // app = docker.build("${env.GIT_REPO_NAME}/development")
                     // app = docker.build("service-availability/dynatrace-reporting-frontend")
                 }
             }
