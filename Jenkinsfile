@@ -66,7 +66,6 @@ pipeline {
             steps {
                 script {
                     sh 'apk add --update docker openrc'
-                    // sh 'make build-production'
                     app = docker.build("${env.GIT_REPO_NAME}")
                 }
             }
