@@ -1,5 +1,6 @@
 pipeline {
     agent {
+        // dockerfile true
         docker {
             image 'node:16.13.1-alpine'
             args '-u root --privileged -v /var/run/docker.sock:/var/run/docker.sock'
@@ -49,45 +50,49 @@ pipeline {
         //     }
         // }
 
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    sh 'yarn --frozen-lockfile'
-                }
-            }
-        }
+        // stage('Install Dependencies') {
+        //     steps {
+        //         script {
+        //             sh 'yarn --frozen-lockfile'
+        //         }
+        //     }
+        // }
 
-        stage('Run Unit Tests') {
-            steps {
-                script {
-                    sh 'yarn test:unit'
-                }
-            }
-        }
+        // stage('Run Unit Tests') {
+        //     steps {
+        //         script {
+        //             sh 'yarn test:unit'
+        //         }
+        //     }
+        // }
 
         stage('Build Docker Image') {
             steps {
                 script {
                     sh 'apk add --update docker openrc'
                     app = docker.build("${env.GIT_REPO_NAME}")
+                    docker.withRegistry('https://registry.hub.docker.com', 'registryCredential') {
+                            app.push("uat-${env.SHORT_COMMIT}")
+                            app.push('latest')
+                        }
                     // app = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
 
-        stage('Push Image to Docker Registry') {
-            when { branch 'develop' }
-            steps {
-                script {
-                    retry(3) {
-                        docker.withRegistry('', registryCredential) {
-                            app.push("uat-${env.SHORT_COMMIT}")
-                            app.push('latest')
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Push Image to Docker Registry') {
+        //     when { branch 'develop' }
+        //     steps {
+        //         script {
+        //             retry(3) {
+        //                 docker.withRegistry('https://registry.hub.docker.com') {
+        //                     app.push("uat-${env.SHORT_COMMIT}")
+        //                     app.push('latest')
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
