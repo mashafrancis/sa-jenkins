@@ -6,11 +6,14 @@ pipeline {
         }
     }
 
-    // environment {
-    //     APP_STAGING = credentials('APP_STAGING')
-    //     APP_PRODUCTION = credentials('APP_PRODUCTION')
-    //     SNYK_TOKEN = credentials('SNYK_TOKEN')
-    // }
+    environment {
+        // APP_STAGING = credentials('APP_STAGING')
+        // APP_PRODUCTION = credentials('APP_PRODUCTION')
+        // SNYK_TOKEN = credentials('SNYK_TOKEN')
+        registryCredential = 'dockerhub'
+        registry = 'mashafrancis/sa-jenkins'
+        app = ''
+    }
 
     stages {
         stage('Clone Repository') {
@@ -37,14 +40,14 @@ pipeline {
         //     }
         // }
 
-        stage('Snyk Security Scan') {
-            steps {
-                snykSecurity(
-                      snykInstallation: 'SA App',
-                      snykTokenId: environment.SNYK_TOKEN,
-                    )
-            }
-        }
+        // stage('Snyk Security Scan') {
+        //     steps {
+        //         snykSecurity(
+        //               snykInstallation: 'SA App',
+        //               snykTokenId: environment.SNYK_TOKEN,
+        //             )
+        //     }
+        // }
 
         stage('Install Dependencies') {
             steps {
@@ -67,6 +70,21 @@ pipeline {
                 script {
                     sh 'apk add --update docker openrc'
                     app = docker.build("${env.GIT_REPO_NAME}")
+                    // app = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+
+        stage('Push Image to Docker Registry') {
+            when { branch 'develop' }
+            steps {
+                script {
+                    retry(3) {
+                        docker.withRegistry('', registryCredential) {
+                            app.push("uat-${env.SHORT_COMMIT}")
+                            app.push('latest')
+                        }
+                    }
                 }
             }
         }
