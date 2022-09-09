@@ -6,11 +6,11 @@ pipeline {
         }
     }
 
-    environment {
-        APP_STAGING = credentials('APP_STAGING')
-        APP_PRODUCTION = credentials('APP_PRODUCTION')
-        SNYK_TOKEN = credentials('SNYK_TOKEN')
-    }
+    // environment {
+    //     APP_STAGING = credentials('APP_STAGING')
+    //     APP_PRODUCTION = credentials('APP_PRODUCTION')
+    //     SNYK_TOKEN = credentials('SNYK_TOKEN')
+    // }
 
     stages {
         stage('Clone Repository') {
@@ -25,17 +25,17 @@ pipeline {
             }
         }
 
-        stage('Copy Credentials') {
-            steps {
-                script {
-                    if (env.BRANCH_NAME == 'main') {
-                        sh 'cp $APP_PRODUCTION .env'
-                            } else {
-                        sh 'cp $APP_STAGING .env'
-                    }
-                }
-            }
-        }
+        // stage('Copy Credentials') {
+        //     steps {
+        //         script {
+        //             if (env.BRANCH_NAME == 'main') {
+        //                 sh 'cp $APP_PRODUCTION .env'
+        //                     } else {
+        //                 sh 'cp $APP_STAGING .env'
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Snyk Security Scan') {
             steps {
@@ -66,7 +66,6 @@ pipeline {
             steps {
                 script {
                     sh 'apk add --update docker openrc'
-                    // sh 'make build-production'
                     app = docker.build("${env.GIT_REPO_NAME}")
                 }
             }
