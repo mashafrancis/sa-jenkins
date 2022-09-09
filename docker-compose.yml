@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web-prod:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: web-prod
+    container_name: web-prod
+    ports:
+      - '3003:3000'
