@@ -16,7 +16,7 @@
     "jenkins:lint": "npm-groovy-lint"
   },
   "dependencies": {
-    "next": "latest",
+    "next": "13.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
